@@ -2,13 +2,21 @@ import {describe, expect, test} from "vitest";
 import {Category} from "./category";
 
 describe("Category Entity", () => {
-    test("should be defined", () =>{
-        const sut = new Category("Andre");
-        expect(sut).to.be.instanceof(Category)
-    })
+    test("Given a valida params, when call newCategory, then instiate a Category", () =>{
+        const expected = {
+            name: "Ação",
+            description: "A categoria mais assistida",
+            active: true,
+        }
 
-    test("the name should be 'Andre'", () => {
-        const sut = new Category("Andre");
-        expect(sut.getName()).toBe("Andre");
+        const sut = Category.newCategory(expected.name, expected.description, expected.active)
+        expect(sut).to.be.instanceof(Category)
+        expect(sut.id).not.toBeNull();
+        expect(sut.name).not.toBeNull();
+        expect(sut.description).not.toBeNull();
+        expect(sut.active).not.toBeNull();
+        expect(sut.createdAt).not.toBeNull();
+        expect(sut.updatedAt).not.toBeNull();
+        expect(sut.deletedAt).toBeNull();
     })
 })
