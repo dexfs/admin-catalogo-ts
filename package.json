@@ -1,0 +1,22 @@
+{
+  "name": "admin-catalogo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx main.ts",
+    "build": "tsup main.ts",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "tsup": "^8.0.1",
+    "vitest": "^1.2.1"
+  }
+}
