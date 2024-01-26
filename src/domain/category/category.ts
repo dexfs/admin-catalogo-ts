@@ -1,5 +1,7 @@
 import {AggregateRoot} from "../aggregate-root";
 import {CategoryID} from "./categoryID";
+import {ValidationHandler} from "../validation/validation.handler";
+import {CategoryValidator} from "./category.validator";
 
 export class Category  extends AggregateRoot<CategoryID> {
     private _name: string
@@ -32,6 +34,12 @@ export class Category  extends AggregateRoot<CategoryID> {
         const now = Date.now();
         return new Category(id, aName, aDescription, aActive, now, now, null)
     }
+
+    validate(handler: ValidationHandler): void {
+        new CategoryValidator(this, handler).validate();
+    }
+
+
 
     get id(): CategoryID {
         return this._id;
