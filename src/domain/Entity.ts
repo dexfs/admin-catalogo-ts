@@ -1,4 +1,5 @@
 import {Identifier} from "./identifier";
+import {ValidationHandler} from "./validation/validation.handler";
 
 export abstract class Entity<ID extends Identifier> {
     protected readonly _id: ID
@@ -7,6 +8,8 @@ export abstract class Entity<ID extends Identifier> {
         if (!id) throw Error("'id' should not be null")
         this._id = id;
     }
+
+    abstract validate(handler: ValidationHandler): void
 
     get id(): ID {
         return this._id
