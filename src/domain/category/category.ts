@@ -1,5 +1,7 @@
-export class Category {
-    private _id: string;
+import {AggregateRoot} from "../aggregate-root";
+import {CategoryID} from "./categoryID";
+
+export class Category  extends AggregateRoot<CategoryID> {
     private _name: string
     private _description: string
     private _active: boolean
@@ -8,15 +10,15 @@ export class Category {
     private _deletedAt: number | null
 
     private constructor(
-        private readonly anId: string,
-        private readonly aName: string,
-        private readonly aDescription: string,
-        private readonly isActive: boolean,
-        private readonly aCreationDate: number,
-        private readonly aUpdateDate: number,
-        private readonly aDeleteDate: number | null,
+        readonly anId: CategoryID,
+        readonly aName: string,
+        readonly aDescription: string,
+        readonly isActive: boolean,
+        readonly aCreationDate: number,
+        readonly aUpdateDate: number,
+        readonly aDeleteDate: number | null,
     ) {
-        this._id = anId
+        super(anId)
         this._name = aName
         this._description = aDescription
         this._active = isActive
@@ -25,18 +27,14 @@ export class Category {
         this._deletedAt = aDeleteDate
     }
 
-    static newCategory(aName: string, aDescription: string, aActive: boolean) {
-        const id = crypto.randomUUID()
+    static newCategory(aName: string, aDescription: string, aActive: boolean, anId?: CategoryID) {
+        const id = anId ?? CategoryID.unique()
         const now = Date.now();
         return new Category(id, aName, aDescription, aActive, now, now, null)
     }
 
-    get id(): string {
+    get id(): CategoryID {
         return this._id;
-    }
-
-    set id(value: string) {
-        this._id = value;
     }
 
     get name(): string {
