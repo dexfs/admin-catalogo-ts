@@ -1,32 +1,42 @@
 import {Validation, ValidationHandler} from "../validation.handler";
-import {DomainException} from "../../exceptions/domain.exception";
 
 export class ThrowsValidationHandler extends ValidationHandler {
+    private errors: any = []
     append(anErrorOrAHandler: Error): ValidationHandler;
     append(anErrorOrAHandler: ValidationHandler): ValidationHandler;
     append(anErrorOrAHandler: Error | ValidationHandler): ValidationHandler {
         if (anErrorOrAHandler instanceof Error) {
-            throw new DomainException([anErrorOrAHandler]);
+            this.errors.push(anErrorOrAHandler)
         }
 
         if (anErrorOrAHandler instanceof ValidationHandler) {
-            throw new DomainException(anErrorOrAHandler.getErrors())
+            for (let error of anErrorOrAHandler.getErrors()) {
+                this.errors.push(error)
+            }
         }
 
         return this
     }
 
     getErrors(): Error[] {
-        return []
+        return this.errors
     }
 
-    validate(aValidation: Validation): ValidationHandler {
+    validate(aValidation: Validation): ValidationHandler;
+    validate(): void;
+    validate(aValidation?: Validation): ValidationHandler | void {
         try {
-            aValidation.validate()
+            if (this.hasErrors()) {
+                console.log("Errors", this.getErrors())
+                throw this.getErrors()
+            }
         } catch (e) {
             // @ts-ignore
-            throw DomainException.with(new Error(e.message))
+            throw e
         }
-        return this;
+
+        return undefined;
     }
+
+
 }

@@ -1,8 +1,7 @@
 export class DomainException extends Error {
-    private readonly errors: unknown[]
-    constructor(anErrors: Error[]) {
-        super();
-        this.errors = anErrors
+    constructor(message: string) {
+        super(message);
+        this.name = 'DomainException'
     }
 
 

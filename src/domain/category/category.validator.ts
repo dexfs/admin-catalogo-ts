@@ -1,6 +1,7 @@
 import {Validator} from "../validation/validator";
 import {ValidationHandler} from "../validation/validation.handler";
 import {Category} from "./category";
+import {DomainException} from "../exceptions/domain.exception";
 
 export class CategoryValidator extends Validator {
 
@@ -13,7 +14,12 @@ export class CategoryValidator extends Validator {
 
     validate(): void {
         if (!this.category.name) {
-            this.validationHandler().append(new Error("'name' should not be null"))
+            this.validationHandler().append(new DomainException("'name' should not be null"))
         }
+        if (!this.category.description) {
+            this.validationHandler().append(new DomainException("'description' should not be null"))
+        }
+
+        this.validationHandler().validate(this)
     }
 }
