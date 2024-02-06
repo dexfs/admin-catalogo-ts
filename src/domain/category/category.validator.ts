@@ -13,13 +13,28 @@ export class CategoryValidator extends Validator {
     }
 
     validate(): void {
-        if (!this.category.name) {
+        this.checkNameConstraints();
+        this.validationHandler().validate(this)
+    }
+
+    private readonly NAME_MAX_LENGTH = 255;
+
+    private readonly NAME_MIN_LENGTH = 3;
+
+    private checkNameConstraints() {
+        const name = this.category.name;
+        if (!name) {
             this.validationHandler().append(new DomainException("'name' should not be null"))
-        }
-        if (!this.category.description) {
-            this.validationHandler().append(new DomainException("'description' should not be null"))
+            return;
         }
 
-        this.validationHandler().validate(this)
+        const length = name.trim().length;
+
+        if (length > this.NAME_MAX_LENGTH || length < this.NAME_MIN_LENGTH) {
+            this.validationHandler().append(new DomainException("'name' must be between 3 and 255 characters"))
+            return;
+        }
+
+
     }
 }
