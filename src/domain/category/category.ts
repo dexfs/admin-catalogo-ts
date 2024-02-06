@@ -29,8 +29,8 @@ export class Category  extends AggregateRoot<CategoryID> {
         this._deletedAt = aDeleteDate
     }
 
-    static newCategory(aName: string, aDescription: string, aActive: boolean, anId?: CategoryID) {
-        const id = anId ?? CategoryID.unique()
+    static newCategory(aName: string, aDescription: string, aActive: boolean) {
+        const id = CategoryID.unique()
         const now = Date.now();
         return new Category(id, aName, aDescription, aActive, now, now, null)
     }

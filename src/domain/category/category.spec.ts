@@ -5,39 +5,40 @@ import {ThrowsValidationHandler} from "../validation/handler/throws-validation.h
 import {DomainException} from "../exceptions/domain.exception";
 
 describe("Category Entity", () => {
-    test("Given a valida params, when call newCategory, then instiate a Category", () =>{
+    test("Given a valid params, when call newCategory, then Instantiate  a Category", () =>{
         const expected = {
-            name: "Ação",
-            description: "A categoria mais assistida",
+            name: 'Filmes',
+            description: 'A categoria mais assistida',
             active: true,
         }
 
-        const expectedId = CategoryID.unique()
-
-        const sut = Category.newCategory(expected.name, expected.description, expected.active, expectedId)
-        expect(sut).to.be.instanceof(Category)
-        expect(sut.id).not.toBeNull();
-        expect(sut.id).toEqual(expectedId);
-        expect(sut.id.equals(expectedId)).toBeTruthy();
-        expect(sut.name).not.toBeNull();
-        expect(sut.description).not.toBeNull();
-        expect(sut.active).not.toBeNull();
-        expect(sut.createdAt).not.toBeNull();
-        expect(sut.updatedAt).not.toBeNull();
-        expect(sut.deletedAt).toBeNull();
+        const actualCategory = Category
+            .newCategory(expected.name, expected.description, expected.active)
+        expect(actualCategory).to.be.instanceof(Category)
+        expect(actualCategory.id).not.toBeNull();
+        expect(actualCategory.id).not.toBeNull();
+        expect(actualCategory.name).not.toBeNull();
+        expect(actualCategory.description).not.toBeNull();
+        expect(actualCategory.active).not.toBeNull();
+        expect(actualCategory.createdAt).not.toBeNull();
+        expect(actualCategory.updatedAt).not.toBeNull();
+        expect(actualCategory.deletedAt).toBeNull();
     })
 
     test('Given an invalid null name, when call new category and validate, then should receive error', () => {
         expect.hasAssertions()
         const expected = {
-            name: null,
-            description: null,
+            name: "Fi ",
+            description: "A categoria mais assistida",
             active: true,
         }
 
-        const expectedId = CategoryID.unique()
-
-        const sut = Category.newCategory(expected.name as any, expected.description as any, expected.active, expectedId)
+        const sut = Category
+            .newCategory(
+                expected.name,
+                expected.description,
+                expected.active
+            )
         try {
             sut.validate(new ThrowsValidationHandler())
         } catch (e) {
@@ -46,8 +47,6 @@ describe("Category Entity", () => {
             expect(errors).toHaveLength(2)
             errors.forEach(e => expect(e).toBeInstanceOf(Error))
             errors.forEach((e, index) => expect(e.message).toBe(expectedMessages[index]))
-
-
         }
     })
 })
