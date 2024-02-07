@@ -32,7 +32,8 @@ export class Category  extends AggregateRoot<CategoryID> {
     static newCategory(aName: string, aDescription: string, aActive: boolean) {
         const id = CategoryID.unique()
         const now = Date.now();
-        return new Category(id, aName, aDescription, aActive, now, now, null)
+        const deletedAt = aActive ? null : Date.now()
+        return new Category(id, aName, aDescription, aActive, now, now, deletedAt)
     }
 
     validate(handler: ValidationHandler): void {
