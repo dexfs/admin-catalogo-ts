@@ -12,13 +12,13 @@ export class Category  extends AggregateRoot<CategoryID> {
     private _deletedAt: number | null
 
     private constructor(
-        readonly anId: CategoryID,
-        readonly aName: string,
-        readonly aDescription: string,
-        readonly isActive: boolean,
-        readonly aCreationDate: number,
-        readonly aUpdateDate: number,
-        readonly aDeleteDate: number | null,
+        anId: CategoryID,
+        aName: string,
+        aDescription: string,
+        isActive: boolean,
+        aCreationDate: number,
+        aUpdateDate: number,
+        aDeleteDate: number | null,
     ) {
         super(anId)
         this._name = aName
@@ -40,7 +40,14 @@ export class Category  extends AggregateRoot<CategoryID> {
         new CategoryValidator(this, handler).validate();
     }
 
-
+    public deactivate(): Category {
+        if (!this._deletedAt) {
+            this._deletedAt = Date.now();
+        }
+        this._active = false;
+        this._updatedAt = Date.now();
+        return this;
+    }
 
     get id(): CategoryID {
         return this._id;
