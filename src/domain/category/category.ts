@@ -40,6 +40,14 @@ export class Category  extends AggregateRoot<CategoryID> {
         new CategoryValidator(this, handler).validate();
     }
 
+
+    public activate(): Category {
+        this._deletedAt = null
+        this._active = true
+        this._updatedAt = Date.now()
+        return this;
+    }
+
     public deactivate(): Category {
         if (!this._deletedAt) {
             this._deletedAt = Date.now();
