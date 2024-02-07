@@ -1,6 +1,5 @@
 import {describe, expect, test, vi, beforeEach, afterEach} from "vitest";
 import {Category} from "./category";
-import {CategoryID} from "./categoryID";
 import {ThrowsValidationHandler} from "../validation/handler/throws-validation.handler";
 import {DomainException} from "../exceptions/domain.exception";
 
