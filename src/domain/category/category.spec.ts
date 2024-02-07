@@ -218,4 +218,109 @@ describe("Category Entity", () => {
         expect(actualCategory.deletedAt).toBeNull();
     })
 
+    test('Given a valid category, when call update, then return category updated', ()=> {
+        expect.hasAssertions()
+        let date = new Date(2024, 1, 1, 13)
+        vi.setSystemTime(date)
+        const expected = {
+            name: 'Filmes',
+            description: 'A categoria mais assistida',
+            isActive: true,
+        }
+        const aCategory = Category
+            .newCategory("Film", "A categoria", true)
+
+        expect(() => aCategory.validate(new ThrowsValidationHandler())).not.toThrow()
+
+        const createdAt = aCategory.createdAt;
+        const updatedAt = aCategory.updatedAt
+
+        date = new Date(2024, 1, 1, 14)
+        vi.setSystemTime(date)
+
+        const actualCategory = aCategory.update(expected.name, expected.description, expected.isActive)
+
+        expect(() => actualCategory.validate(new ThrowsValidationHandler())).not.toThrow()
+
+        expect(actualCategory).toBeInstanceOf(Category)
+
+        expect(aCategory.id).toEqual(actualCategory.id)
+        expect(actualCategory.name).toBe(expected.name)
+        expect(actualCategory.description).toBe(expected.description)
+        expect(actualCategory.active).toBe(expected.isActive)
+        expect(actualCategory.createdAt).toBe(createdAt)
+        expect(actualCategory.updatedAt > updatedAt).toBeTruthy()
+        expect(actualCategory.deletedAt).toBeNull()
+    })
+
+    test('Given a valid category, when call update to inactive, then return category updated', ()=> {
+        expect.hasAssertions()
+        let date = new Date(2024, 1, 1, 13)
+        vi.setSystemTime(date)
+        const expected = {
+            name: 'Filmes',
+            description: 'A categoria mais assistida',
+            isActive: false,
+        }
+        const aCategory = Category
+            .newCategory("Film", "A categoria", true)
+
+        expect(() => aCategory.validate(new ThrowsValidationHandler())).not.toThrow()
+        expect(aCategory.active).toBeTruthy()
+        expect(aCategory.deletedAt).toBeNull()
+
+        const createdAt = aCategory.createdAt;
+        const updatedAt = aCategory.updatedAt
+
+        date = new Date(2024, 1, 1, 14)
+        vi.setSystemTime(date)
+
+        const actualCategory = aCategory.update(expected.name, expected.description, expected.isActive)
+
+        expect(() => actualCategory.validate(new ThrowsValidationHandler())).not.toThrow()
+
+        expect(actualCategory).toBeInstanceOf(Category)
+
+        expect(aCategory.id).toEqual(actualCategory.id)
+        expect(actualCategory.name).toBe(expected.name)
+        expect(actualCategory.description).toBe(expected.description)
+        expect(actualCategory.active).toBe(expected.isActive)
+        expect(actualCategory.createdAt).toBe(createdAt)
+        expect(actualCategory.updatedAt > updatedAt).toBeTruthy()
+        expect(actualCategory.deletedAt).not.toBeNull()
+    })
+
+    test('Given a valid category, when call update with invalid param, then return category updated', ()=> {
+        expect.hasAssertions()
+        let date = new Date(2024, 1, 1, 13)
+        vi.setSystemTime(date)
+        const expected = {
+            name: null,
+            description: 'A categoria mais assistida',
+            isActive: true,
+        }
+        const aCategory = Category
+            .newCategory("Film", "A categoria", expected.isActive)
+
+        expect(() => aCategory.validate(new ThrowsValidationHandler())).not.toThrow()
+
+        const createdAt = aCategory.createdAt;
+        const updatedAt = aCategory.updatedAt
+
+        date = new Date(2024, 1, 1, 14)
+        vi.setSystemTime(date)
+
+        const actualCategory = aCategory.update(expected.name as any, expected.description, expected.isActive)
+
+        expect(actualCategory).toBeInstanceOf(Category)
+
+        expect(aCategory.id).toEqual(actualCategory.id)
+        expect(actualCategory.name).toBe(expected.name)
+        expect(actualCategory.description).toBe(expected.description)
+        expect(actualCategory.active).toBe(expected.isActive)
+        expect(actualCategory.createdAt).toBe(createdAt)
+        expect(actualCategory.updatedAt > updatedAt).toBeTruthy()
+        expect(actualCategory.deletedAt).toBeNull()
+    })
+
 })
