@@ -184,4 +184,39 @@ describe("Category Entity", () => {
         expect(actualCategory.deletedAt).not.toBeNull();
     })
 
+    test('Given a valid inactive category, when call activate, then return Category activated', () => {
+        expect.hasAssertions()
+        let date = new Date(2024, 1, 1, 13)
+        vi.setSystemTime(date)
+        const expected = {
+            name: 'Filmes',
+            description: 'A categoria mais assistida',
+            isActive: true,
+        }
+        const aCategory = Category
+            .newCategory(expected.name, expected.description, false)
+
+        expect(() => aCategory.validate(new ThrowsValidationHandler())).not.toThrow()
+
+        const createdAt = aCategory.createdAt;
+        const updatedAt = aCategory.updatedAt
+        expect(aCategory.active).toBeFalsy();
+        expect(aCategory.deletedAt).not.toBeNull();
+
+        date = new Date(2024, 1, 1, 14)
+        vi.setSystemTime(date)
+
+        const actualCategory = aCategory.activate()
+
+        expect(actualCategory).toBeInstanceOf(Category)
+        expect(aCategory.id).toEqual(actualCategory.id);
+        expect(actualCategory.name).toBe(expected.name);
+        expect(actualCategory.description).toBe(expected.description);
+        expect(actualCategory.active).toBe(expected.isActive);
+        expect(actualCategory.active).toBeTruthy();
+        expect(actualCategory.createdAt).toBe(createdAt);
+        expect(actualCategory.updatedAt > updatedAt).toBeTruthy();
+        expect(actualCategory.deletedAt).toBeNull();
+    })
+
 })
