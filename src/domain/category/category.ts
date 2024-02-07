@@ -57,6 +57,22 @@ export class Category  extends AggregateRoot<CategoryID> {
         return this;
     }
 
+    public update(
+        aName: string,
+        aDescription: string,
+        isActive: boolean
+    ): Category {
+        if (isActive) {
+            this.activate()
+        } else {
+            this.deactivate()
+        }
+        this._name = aName
+        this._description = aDescription
+        this._updatedAt = Date.now()
+        return this;
+    }
+
     get id(): CategoryID {
         return this._id;
     }
